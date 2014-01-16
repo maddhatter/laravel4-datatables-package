@@ -153,7 +153,7 @@ class Datatables
 	private function save_query($query)
 	{
 		$this->query = $query;
-		$this->query_type = get_class($query) == 'Illuminate\Database\Query\Builder' ? 'fluent' : 'eloquent';
+		$this->query_type = ($query instanceof \Illuminate\Database\Query\Builder) ? 'fluent' : 'eloquent';
 		$this->columns = $this->query_type == 'eloquent' ? $this->query->getQuery()->columns : $this->query->columns;
 	}
 
@@ -483,8 +483,7 @@ class Datatables
 	private function count()
 	{
 		//Get columns to temp var.
-        $query_type = get_class($this->query) == 'Illuminate\Database\Query\Builder' ? 'fluent' : 'eloquent';
-		$columns = $query_type == 'eloquent' ? $this->query->getQuery()->columns : $this->query->columns;
+		$columns = $this->query_type == 'eloquent' ? $this->query->getQuery()->columns : $this->query->columns;
 		
 		$this->count_all = $this->query->count();
 		
